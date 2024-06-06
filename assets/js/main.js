@@ -272,68 +272,77 @@
 
 
 
+
+
+
 const scriptURL = 'https://script.google.com/macros/s/AKfycbwu2MT_ZAJEm1QtrB3mA1glhF9-_BMfI1U9y567ddxNYToA0dkqjnz1csH5I8apvOEc/exec'; // Replace with your Google Apps Script URL
         const form = document.getElementById('form');
-document.getElementById('form').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevent form submission
 
-  // Clear previous errors
-  document.getElementById('nameError').style.display = 'none';
-  document.getElementById('emailError').style.display = 'none';
-  document.getElementById('subjectError').style.display = 'none';
-  document.getElementById('messageError').style.display = 'none';
-  document.querySelector('.error-message').textContent = '';
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
 
-  // Get form values
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const subject = document.getElementById('subject').value.trim();
-  const message = document.getElementById('message').value.trim();
+            // Clear previous errors
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('subjectError').style.display = 'none';
+            document.getElementById('messageError').style.display = 'none';
+            document.querySelector('.error-message').textContent = '';
 
-  let valid = true;
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
 
-  // Name validation
-  if (name === '') {
-      document.getElementById('nameError').style.display = 'block';
-      valid = false;
-  }
+            let valid = true;
 
-  // Email validation
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (email === '') {
-      document.getElementById('emailError').textContent = 'Email is required';
-      document.getElementById('emailError').style.display = 'block';
-      valid = false;
-  } else if (!emailPattern.test(email)) {
-      document.getElementById('emailError').textContent = 'Invalid email format';
-      document.getElementById('emailError').style.display = 'block';
-      valid = false;
-  }
+            // Name validation
+            if (name === '') {
+                document.getElementById('nameError').style.display = 'block';
+                valid = false;
+            }
 
-  // Subject validation
-  if (subject === '') {
-      document.getElementById('subjectError').style.display = 'block';
-      valid = false;
-  }
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                document.getElementById('emailError').textContent = 'Email is required';
+                document.getElementById('emailError').style.display = 'block';
+                valid = false;
+            } else if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Invalid email format';
+                document.getElementById('emailError').style.display = 'block';
+                valid = false;
+            }
 
-  // Message validation
-  if (message === '') {
-      document.getElementById('messageError').style.display = 'block';
-      valid = false;
-  }
+            // Subject validation
+            if (subject === '') {
+                document.getElementById('subjectError').style.display = 'block';
+                valid = false;
+            }
 
-  // If the form is valid, simulate form submission
-  if (valid) {
-      document.querySelector('.loading').style.display = 'block';
+            // Message validation
+            if (message === '') {
+                document.getElementById('messageError').style.display = 'block';
+                valid = false;
+            }
 
-      // Simulate a form submission delay
-      setTimeout(() => {
-          document.querySelector('.loading').style.display = 'none';
-          document.querySelector('.sent-message').style.display = 'block';
-          document.getElementById('form').reset();
-      }, 2000);
-  } else {
-      document.querySelector('.error-message').textContent = 'Please correct the errors above.';
-      document.querySelector('.error-message').style.color = 'red';
-}
-});
+            // If the form is valid, proceed with form submission
+            if (valid) {
+                document.querySelector('.loading').style.display = 'block';
+
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                    .then(response => {
+                        document.querySelector('.loading').style.display = 'none';
+                        document.querySelector('.sent-message').style.display = 'block';
+                        form.reset();
+                    })
+                    .catch(error => {
+                        document.querySelector('.loading').style.display = 'none';
+                        document.querySelector('.error-message').textContent = 'There was an error submitting the form. Please try again.';
+                        document.querySelector('.error-message').style.display = 'block';
+                    });
+            } else {
+                document.querySelector('.error-message').textContent = 'Please correct the errors above.';
+                document.querySelector('.error-message').style.color = 'red';
+            }
+        });
