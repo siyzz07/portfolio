@@ -275,7 +275,7 @@
 
 
 
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwu2MT_ZAJEm1QtrB3mA1glhF9-_BMfI1U9y567ddxNYToA0dkqjnz1csH5I8apvOEc/exec'; // Replace with your Google Apps Script URL
+const scriptURL = 'https://script.google.com/macros/s/AKfycbznobCw_HAUx-cDGkkmYDLWk5nrVqVPHJ_53G6Dynq1BxeL5OF9jL6a5PR-lLLkYPQq/exec'; // Replace with your Google Apps Script URL
         const form = document.getElementById('form');
 
         form.addEventListener('submit', function(event) {
